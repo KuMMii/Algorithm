@@ -9,47 +9,38 @@ public class bj_1592 {
 	    	
 	        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 	        String[] strArr=br.readLine().split(" ");
-	        int M=Integer.parseInt(strArr[0]);
-	        int N=Integer.parseInt(strArr[1]);
-	        int L=Integer.parseInt(strArr[2]);
+	        int M=Integer.parseInt(strArr[0]); //사람
+	        int N=Integer.parseInt(strArr[1]); //값
+	        int L=Integer.parseInt(strArr[2]); //칸
 	        
 	        int[] arr=new int[M];
 	        
 	        int cnt=0;
 	        int idx=0;
-	        while(compare(arr,N)){
-	        	if(idx%2==1) {
-	        		
-		            if((idx+L) > (M-1)){
-		                Math.abs((idx+L)-M);
-		            }else{
-		                idx+=L;
+	        while(true){
+	        	
+	        	if(arr[idx]%2==1) { //홀수일때 시계방향
+	        		idx+=L;
+		            if((idx) > (M-1)){
+		                idx=idx%M;
 		            }
-	        	}else {
-	        		if((idx-L) <0){
-	        			Math.abs((idx-L)-M);
-	        		}else{
-	        			idx-=L;
+	        	}else { //짝수일때 반시계
+	        		idx-=L;
+	        		if((idx) <0){
+	        			idx=M+idx;
 	        		}
 	        		
 	        	}
 	            arr[idx]++;
+	            for(int i=0; i<arr.length;i++) {
+	            	if(arr[i]==N) {
+	            		System.out.println(cnt);
+ 	            		return;
+	            	}
+	            }
 	            cnt++;
 	        }
-	        System.out.println(cnt);
 	    }
 	    
-	    public static boolean compare(int[] arr, int N) {
-			
-			for(int i=0; i<arr.length;i++) {
-				if(arr[i]==N) {
-					return false;
-				}
-			}
-			return true;
-		}
 }
 
-class Main{
-    
-}
