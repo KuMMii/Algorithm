@@ -1,10 +1,10 @@
-package YYP.bj_14696;
+package YYP.boj_14696;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class BJ_14696_upgraded {
+public class BOJ_14696 {
 	
 	public static void main(String[] args) throws IOException{
 		

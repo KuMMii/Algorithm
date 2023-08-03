@@ -1,10 +1,10 @@
-package YYP.bj_1592;
+package YYP.boj_1592;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class bj_1592 {
+public class boj_1592 {
 	public static void main(String[] args) throws IOException{
 	    	
 	        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));

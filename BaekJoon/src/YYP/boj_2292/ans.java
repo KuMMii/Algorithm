@@ -1,4 +1,4 @@
-package YYP.bj_2292;
+package YYP.boj_2292;
 import java.util.Scanner;
 
 public class ans {
