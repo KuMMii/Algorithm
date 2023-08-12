@@ -1,4 +1,4 @@
-package d2;
+package d2.SWEA_1859;
 
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package SWEA_1206_View;
+package d2.SWEA_1206_View;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Solution {
 	public static void main(String[] args) {
-//		File file=new File("src/SWEA_1206_View/input.txt");
+//		File file=new File("src/d2/SWEA_1206_View/input.txt");
 //		try {
 //			Scanner sc= new Scanner(file);
 //			
@@ -15,7 +15,7 @@ public class Solution {
 //		}
 		
 		try {
-			System.setIn(new FileInputStream("src/SWEA_1206_View/input.txt"));
+			System.setIn(new FileInputStream("src/d2/SWEA_1206_View/input.txt"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
