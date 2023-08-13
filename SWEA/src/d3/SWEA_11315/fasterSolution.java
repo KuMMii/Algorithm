@@ -1,4 +1,4 @@
-package SWEA_11315_오목판정;
+package d3.SWEA_11315;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
