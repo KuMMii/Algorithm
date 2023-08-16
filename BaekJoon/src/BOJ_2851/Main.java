@@ -1,4 +1,4 @@
-package BOJ_2851_j;
+package BOJ_2851;
 
 import java.util.Scanner;
 
@@ -9,7 +9,7 @@ public class Main {
 		for(int i=0; i<10; i++) {
 			arr[i]=sc.nextInt();
 		}
-		int max=0;
+		int max=arr[0];
 		for(int i=1; i<10; i++) { //고정 인덱스
 			arr[i]+=arr[i-1];
 			if(Math.abs(100-arr[i])<=Math.abs(100-arr[i-1])) {
@@ -17,7 +17,6 @@ public class Main {
 			}else {
 				break;
 			}
-			
 		}//i
 		
 		System.out.println(max);
