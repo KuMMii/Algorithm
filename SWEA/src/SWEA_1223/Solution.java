@@ -10,36 +10,35 @@ import java.util.Scanner;
 public class Solution{
 	
 	
-	public static Map<Character, Integer> priority=new HashMap<>();
-	public static char[] stack;
+	public static Map<String, Integer> priority=new HashMap<>();
+	public static String[] stack;
 	public static int top=-1;
 	
 	
 	public static void main(String[] args) throws FileNotFoundException {
-		priority.put('*',2);
-		priority.put('/',2);
-		priority.put('+',1);
-		priority.put('-',1);
-		priority.put('(',0);
+		priority.put("*",2);
+		priority.put("/",2);
+		priority.put("+",1);
+		priority.put("-",1);
+		priority.put("(",0);
 		System.setIn(new FileInputStream("src/SWEA_1223/input.txt"));
 		Scanner sc=new Scanner(System.in);
 		
-		for(int tc=1; tc<=1; tc++) {
+		for(int tc=1; tc<=10; tc++) {
 			int sum=0;
 			
 			
 			int l=sc.nextInt();
-			stack=new char[l];
+			stack=new String[l];
 			String str=sc.next();
 			
 			//infix->postfix
 			String post="";
 			
 			for(int i=0; i<l; i++) { //입력받은 문자 한글자씩 돌려
-				char c=str.charAt(i);
-//				System.out.println( "c: "+c);
-//				System.out.println("top: "+top);
-				if(48<=(int)c && (int)c <=57) { //숫자일때
+				String c=str.charAt(i)+"";
+				
+				if("0123456789".contains(c)) { //숫자일때
 					post+=c; //String에 붙이기
 					
 				}else { //문자일때
@@ -53,35 +52,47 @@ public class Solution{
 							post+=pop();
 						}
 					}//while
+					
+					
+					
 				}//else-str.charAt(i)가 문자일때
 			}//i
-			System.out.println(post);
 			
-			System.out.println(Arrays.toString(stack));
+			while(!isEmpty()) { //스택에 남은 거 꺼내기
+				post+=pop();
+				stack[top+1]=null;
+			}//while
+			
 			
 			//post->calculate
 			l=post.length(); //postfix String length
 			
 			for(int i=0; i<l; i++) {
-				char c=post.charAt(i);
+				String c=post.charAt(i)+"";
 
-				if(48<=(int)c && (int)c <=57) { //숫자면 push
+				if("0123456789".contains(c)) { //숫자면 push
 					push(c);
 				}else { //문자면,,,할게 많음
+					int a=Integer.parseInt(pop());
+					int b=Integer.parseInt(pop());
 					switch(c) {
-					case '*' : push((char)((int)pop()-'0'*((int)pop()-'0')));
-					case '+' : push((char)((int)pop()-'0'+((int)pop()-'0')));
+					case "*" : 
+						push(String.valueOf(a*b));
+						break;
+					case "+" : 
+						push(String.valueOf(a+b));
+						break;
 					}//switch
 					
 				}//else
-				System.out.println(Arrays.toString(stack));
 			}//i
 			
+				System.out.println(Arrays.toString(stack));
 			
 			
 			
-			
-			System.out.printf("#%d %d\n", tc, (int)pop()-'0');
+			System.out.println("마지막 숫자"+(Integer.parseInt(stack[top])));
+			System.out.printf("#%d %d\n", tc, Integer.parseInt(pop()));
 		}//tc
 		
 	} //main
@@ -89,19 +100,16 @@ public class Solution{
 	
 	
 	//pop
-	public static char pop() {
+	public static String pop() {
 		if(isEmpty()) {
-			return '\u0000';
+			return null;
 		}
-//		System.out.println("pop");
-
 		return stack[top--];
 	}
 	
 	
 	//push
-	public static void push(char c) {
-//		System.out.println("push");
+	public static void push(String c) {
 		stack[++top]=c;
 	}
 	
@@ -109,7 +117,6 @@ public class Solution{
 	
 	//isEmpty
 	public static boolean isEmpty() {
-//		if(top==-1)	System.out.println("empty");
 		return top==-1;
 	}
 	
