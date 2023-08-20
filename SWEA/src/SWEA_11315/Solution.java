@@ -1,4 +1,4 @@
-package d3.SWEA_11315;
+package SWEA_11315;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
