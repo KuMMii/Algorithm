@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Solution {
-	static String[] arr;
+	static String[][] arr;
 	static int N;
 	static int numL;
 	static int numR;
@@ -15,62 +15,66 @@ public class Solution {
 		System.setIn(new FileInputStream("src/SWEA_1232_사칙연산/input.txt"));
 		Scanner sc=new Scanner(System.in);
 		
-		for(int tc=1; tc<=1; tc++) {
+		for(int tc=1; tc<=10; tc++) {
 			N=sc.nextInt();
 			sc.nextLine(); //엔터도 인식을 해서
 			
-			arr=new String[N+1];
+			arr=new String[N+1][3]; //row=index, col=V,Lidx,Ridx
 			for(int i=1; i<=N; i++) { //배열에 단어 넣기
 				String[] tmp=sc.nextLine().split(" ");
-				arr[i]=tmp[1];
+				arr[i][0]=tmp[1];
+				if(tmp.length==4) {
+					arr[i][1]=tmp[2];
+					arr[i][2]=tmp[3];
+				}
 			}// for i
-			
 			System.out.printf("#%d ", tc);
 			inorder(1);
-			System.out.println(arr[1]);
+			System.out.println(arr[1][0]);
 		}//tc
 	}//main
 	
 	public static void inorder(int i) {
-//		System.out.println("전체i"+i);
 		if(i<=N) {
-//			System.out.println("가넝i"+i);
-			inorder(i*2); //L
-			inorder(i*2+1); //R
+			if(arr[i][1]==null) return;
+			else inorder(Integer.parseInt(arr[i][1])); //L
 			
-			if(arr[i]!=null) {// null이 아닐때
-//				System.out.println(arr[i]);
-					
-					if("+-/*".contains(arr[i])) {//연산자면
-//						System.out.println(Arrays.toString(arr));
-						switch(arr[i]) {
+			if(arr[i][2]==null) return;
+			else inorder(Integer.parseInt(arr[i][2])); //R
+				
+				
+			
+			if(arr[i][0]!=null) {// null이 아닐때
+					if("+-/*".contains(arr[i][0])) {//연산자면
+						
+						//자식들 숫자 저장
+						int idxL=Integer.parseInt(arr[i][1]);
+						int idxR=Integer.parseInt(arr[i][2]);
+						numL=Integer.parseInt(arr[idxL][0]);
+						numR=Integer.parseInt(arr[idxR][0]);
+						
+						switch(arr[i][0]) {
 						case "+":
-							arr[i]=Integer.toString(numL+numR);
+							arr[i][0]=Integer.toString(numL+numR);
 							break;
 						case "-":
-							arr[i]=Integer.toString(numL-numR);
+							arr[i][0]=Integer.toString(numL-numR);
 							break;
 						case "*":
-							arr[i]=Integer.toString(numL*numR);
+							arr[i][0]=Integer.toString(numL*numR);
 							break;
 						case "/":
-							arr[i]=Integer.toString(numL/numR);
+							arr[i][0]=Integer.toString(numL/numR);
 							break;
 						}//switch
-						if(i%2==0) {//짝수 일 때
-							numL=Integer.parseInt(arr[i]);
-						}else {
-							numR=Integer.parseInt(arr[i]);
-						}
+						
 						
 					}else { //숫자면
-						System.out.println(Arrays.toString(arr));
 						if(i%2==0) {//짝수 일 때
-							numL=Integer.parseInt(arr[i]);
+							numL=Integer.parseInt(arr[i][0]);
 						}else {
-							numR=Integer.parseInt(arr[i]);
+							numR=Integer.parseInt(arr[i][0]);
 						}
-						System.out.printf("L %d /R %d\n",numL,numR);
 					}//숫자인지 아닌지 if
 					 
 				

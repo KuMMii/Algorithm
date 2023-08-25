@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileInputStream;
 import java.util.Scanner;
 
-class Solution{
+class Solution2{
 	public static void main(String[] args) throws FileNotFoundException{
     	System.setIn(new FileInputStream("src/SWEA_1979_어디에단어가들어갈수있을까/input.txt"));
         Scanner sc=new Scanner(System.in);
@@ -28,62 +28,63 @@ class Solution{
             
             
             //1탐색
-            for(int r=0; r<=N-K; r++){
-            	for(int c=0; c<=N-K; c++){
+            for(int r=0; r<N; r++){
+            	for(int c=0; c<N; c++){
                     if(arr[r][c]==1){ //1발견
-                    	System.out.printf("r : %d  c : %d\n",r,c);
                         int rCnt=0;
                         int cCnt=0;
                     	for(int i=1; i<K; i++){
-                            
-                            if(r+i<N){//세로범위
-                            	if(arr[r+i][c]==0) {//세로 찾기
+                    		
+                    		//세로범위
+                            if(r+i<N){
+                            	if(arr[r+i][c]==0) {//더 밑의 범위
                             		
                             	}
                                 else rCnt++;
                             }//if 세로 범위
                         	
-                            if(c+i<N){//가로범위
+                            //가로범위
+                            if(c+i<N){
                             	if(arr[r][c+i]==0) {//가로 찾기
                             		
                             	}
                                 else cCnt++;
                             }//if 가로 범위
-                            System.out.println(rCnt);
-                            System.out.println(cCnt);
                         }//for 1찾은 곳 기준 k까지 감
                         
+                    	
                     	boolean flag=true;
-                        if(rCnt==K-1){//가로 가능하면 양옆 확인
-                        	System.out.println("가로 성공");
-                            if(r+K<N){//가로 범위
-                                if(arr[r+K][c]==1){
-                                	flag=false;
-                                }//if 양옆 확인
-                            }else if(r-1>=0){//가로 범위
-                                if(arr[r-1][c]==1){
+                    	
+                    	//가로 가능하면 양옆 확인
+                        if(rCnt==K-1){
+                            if(r+K<N){//가로 범위 가넝
+                                if(arr[r+K][c]==1){ //끝보다 한칸 더 확인
                                 	flag=false;
                                 }//if 양옆 확인
                             }
-                            if(flag) ans++;
+                            if(r-1>=0){//가로 범위 가넝 두개가 다 되는 경우도 있어서 if로 따로 확인해줌
+	                            if(arr[r-1][c]==1){//맨앞보다 한칸 더 앞 확인
+	                            	flag=false;
+	                            }
+                            }
+                            if(flag) ans++; //true면 ans++
                         }//if 가로가넝
                         
-                        
+                        //세로 차례
                         flag=true;
                         if(cCnt==K-1){//세로 가능하면 양옆 확인
-                        	System.out.println("세로 성공");
                             if(c+K<N){//가로 범위
                                 if(arr[r][c+K]==1){
                                 	flag=false;
                                 }//if 양옆 확인
-                            }else if(c-1>=0){//가로 범위
+                            }
+                            if(c-1>=0){//가로 범위
                                 if(arr[r][c-1]==1){
                                 	flag=false;
                                 }//if 양옆 확인
                             }
                             if(flag) ans++;
                         }//if 세로가넝
-                        
                         
                     }//if
                 }//j
