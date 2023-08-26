@@ -1,4 +1,4 @@
-package SWEA_2805_농작물수확하기;
+package SWEA_2805;
 
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
@@ -7,7 +7,7 @@ import java.util.Scanner;
 class Solution{
 	public static void main(String[] args) throws FileNotFoundException{
     
-        System.setIn(new FileInputStream("src/SWEA_2805_농작물수확하기/input.txt"));
+        System.setIn(new FileInputStream("src/SWEA_2805/input.txt"));
 		Scanner sc=new Scanner(System.in);
         
         int T=sc.nextInt();

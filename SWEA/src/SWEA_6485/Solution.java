@@ -1,4 +1,5 @@
-package SWEA_6485_삼성시의버스노선;
+//package SWEA_6485_삼성시의버스노선;
+package SWEA_6485;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
