@@ -37,9 +37,11 @@ public class Solution {
 					if(num+i<=N && num-i>=1 && arr[num+i]==arr[num-i]) {
 						arr[num+i]=(arr[num+i]+1)%2;
 						arr[num-i]=(arr[num-i]+1)%2;
+					}else {
+						break;
 					}
 				}//for i
-			
+				break;
 			}//switch
 		}//for p
 		
@@ -48,7 +50,7 @@ public class Solution {
 			System.out.print(arr[i]+" ");
 			if(i%20==0) System.out.println();
 		}
-		
+		System.out.println();
 	}//main
 
 }//class

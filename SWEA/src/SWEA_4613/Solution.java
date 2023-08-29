@@ -8,7 +8,8 @@ import java.util.Scanner;
 public class Solution {
 	
 	static char[][] arr, tmp;
-	static int sum,min,R,C,beforeUp,beforeDown,beforeSum;
+	static int before,sum,min,R,C,fix=0;
+	static int[][] save;
 	
 	
 	public static void main(String[] args) throws FileNotFoundException {
@@ -20,6 +21,7 @@ public class Solution {
 		
 		for(int tc=1; tc<=1; tc++) {
 			
+			fix=0;
 			sum=0;
 			min=2500;
 			
@@ -43,11 +45,11 @@ public class Solution {
 			
 			for(int i=0;i<C; i++) {
 				if(tmp[0][i]!='W') {
-					sum++;
+					fix++;
 					tmp[0][i]='W';
 				}
 				if(tmp[R-1][i]!='R') {
-					sum++;
+					fix++;
 					tmp[R-1][i]='R';
 				}
 				
@@ -61,21 +63,14 @@ public class Solution {
 					}
 				}
 			}//for i
+			System.out.println("f" +fix);
+			save=new int[R-2][R-2];
+			save[0][R-3]=sum;
+			before=sum;
+			middle(0,R-3);
 			
-			System.out.println("sum : "+sum);
-			
-			
-			//두번째줄, 마지막에서 두번째줄부터 바꾸기 시작
-			beforeUp=1;
-			beforeDown=R-2;
-			beforeSum=sum;
-			
-			System.out.println("bup : "+beforeUp+" bdown : "+beforeDown);
-			
-			middle(1,R-2);
-			
-			
-			System.out.printf("#%d %d\n",tc,min);
+			System.out.println("min:"+min);
+			System.out.printf("#%d %d\n",tc,min+fix);
 		}//tc
 		
 	}//main
@@ -84,94 +79,77 @@ public class Solution {
 
 	private static void middle(int upIdx, int downIdx) {
 		
-		char[][] tmp=new char[R][C];
 		
-		for(int i=0; i<R; i++) {
-			for(int j=0; j<C; j++) {
-				tmp[i][j]=arr[i][j];
-			}
+		System.out.println("sum위 : "+sum);
+
+		//전값을 설정
+		if(upIdx-1<0 && downIdx+1>=save.length) {
+			before=save[upIdx][downIdx];
+			System.out.println(11111);
+		}else if(upIdx-1<0) {
+			before=save[upIdx][downIdx+1];
+			System.out.println(2222);
+		}else if(downIdx+1>=save.length) {
+			before=save[upIdx+1][downIdx];
+			System.out.println(3333);
 		}
+		
+		System.out.println("before : "+before);
+		char[][] tmp=new char[R-2][C];
+		System.out.println("up : "+upIdx+" down : "+downIdx );
+		
+		//맨위, 맨 아래 제외한 부분 복사한 배열 생성
+		for(int i=0; i<R-2; i++) {
+			for(int j=0; j<C; j++) {
+				tmp[i][j]=arr[i+1][j];
+			}
+		}//for
 
 		if(downIdx-upIdx<0) return;
 		
-		
-		sum=0;
-		System.out.println("bup : "+beforeUp+" bdown : "+beforeDown+" bsum : "+beforeSum);
-
-		System.out.println("up : "+upIdx+" down : "+downIdx );
-		
-		//다른 줄만 하면 되니까!
 		int cnt=0;
-		if(beforeUp!=upIdx && beforeDown!=downIdx) {//두줄 전부 다른 경우
-			for(int j=0; j<C; j++) {
-				//B바꿨던 거 빼주는 작업
-				if(tmp[beforeUp][j]!='B') {
-					cnt++;
-				}
-				if(tmp[beforeDown][j]!='B') {
-					cnt++;
-				}
+		sum=0;
 
-				//이건 바꾸는 작업
-				if(tmp[beforeUp][j]!='W') {
-					sum++;
-				}
-				if(tmp[beforeDown][j]!='R') {
-					sum++;
-				}
-				
-				System.out.println("다 다른 경우");
-				System.out.println("sum: "+sum);
-				System.out.println("cnt: "+cnt);
-				
-			}//for
-		}else if(beforeUp!=upIdx) {//윗줄 다른 경우
-			for(int j=0; j<C; j++) {
-				if(tmp[beforeUp][j]!='B') {
+		
+		//upIdx 윗줄을 무조건 B빼고 W로 바꾸기
+		for(int j=0; j<C; j++) {//B바꾼거 더한거 빼기
+			if(upIdx-1>=0) {
+				if(tmp[upIdx-1][j]!='B') { //B
 					cnt++;
 				}
-				
-				if(tmp[beforeUp][j]!='W') {
+				if(tmp[upIdx-1][j]!='W') { //W
 					sum++;
 				}
 				
-			}//for
+			}//윗 줄이 범위내에 있다면
 			
-			System.out.println("위 다른 경우");
-			System.out.println("sum: "+sum);
-			System.out.println("cnt: "+cnt);
-			
-		}else if(beforeDown!=downIdx) {//아랫줄 다른 경우
-			for(int j=0; j<C; j++) {
-				if(tmp[beforeDown][j]!='B') {
+			//down보다 한줄 밑
+			if(downIdx+1<tmp.length) {
+				if(tmp[downIdx+1][j]!='B') { //B
 					cnt++;
 				}
-				
-				if(tmp[beforeDown][j]!='R') {
+				if(tmp[downIdx+1][j]!='R') { //W
 					sum++;
 				}
 				
-			}//for
-			
-			System.out.println("아래 다른 경우");
-			System.out.println("sum: "+sum);
-			System.out.println("cnt: "+cnt);
-			
-		}//if 다른 경우
+			}//범위내에 아랫줄이 있는지 확인
+		}//for B
 		
-		beforeSum-=cnt;
+		System.out.println("cnt최종 : "+cnt);
 		
-		sum+=beforeSum;
+		System.out.println("sum 합 : "+sum);
 		
-		min=Math.min(sum, min);
+		sum+=(before-cnt);
+		save[upIdx][downIdx]=sum;
 		
-		beforeUp=upIdx;
-		beforeDown=downIdx;
-		beforeSum=sum;
-
-		middle(upIdx+1,downIdx);
-		middle(upIdx,downIdx-1);
-		middle(upIdx+1,downIdx-1);
+		System.out.println("sum보내는값 : "+sum);
+		min=Math.min(min, sum);
+		
+		if(upIdx+1<tmp.length) middle(upIdx+1,downIdx);
+		if(upIdx-1>=0) middle(upIdx,downIdx-1);
+		if(upIdx+1<tmp.length && upIdx-1>=0) middle(upIdx+1,downIdx-1);
 		
 	}//middle
 }//class
+
+
