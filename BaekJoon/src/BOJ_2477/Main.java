@@ -39,29 +39,12 @@ public class Main {
 		int cMin=Integer.MAX_VALUE;
 		int cMax=Integer.MIN_VALUE;
 		
-		int[][] Pos=new int[4][2];
 		
 		for(int i=0; i<6; i++) {
-			if(xy[i][0]<rMin) {
-				rMin=xy[i][0];
-				Pos[0][0]=xy[i][0];
-				Pos[0][1]=xy[i][1];
-			}
-			if(xy[i][0]>rMax) {
-				rMax=xy[i][0];
-				Pos[1][0]=xy[i][0];
-				Pos[1][1]=xy[i][1];
-			}
-			if(xy[i][1]<cMin) {
-				cMin=xy[i][1];
-				Pos[2][0]=xy[i][0];
-				Pos[2][1]=xy[i][1];
-			}
-			if(xy[i][1]>cMax) {
-				cMax=xy[i][1];
-				Pos[3][0]=xy[i][0];
-				Pos[3][1]=xy[i][1];
-			}
+			if(xy[i][0]<rMin) rMin=xy[i][0];
+			if(xy[i][0]>rMax) rMax=xy[i][0];
+			if(xy[i][1]<cMin) cMin=xy[i][1];
+			if(xy[i][1]>cMax) cMax=xy[i][1];
 		}
 		
 		int width=Math.abs(rMax-rMin);
@@ -74,17 +57,23 @@ public class Main {
 		int zeroR=0;
 		int zeroC=0;
 		
-		for(int i=0; i<4; i++) {
-			if(blank[Pos[i][0]][Pos[i][1]]==0) {
-				zeroR=Pos[i][0];
-				zeroC=Pos[i][1];
-			}
-			System.out.println("r : "+Pos[i][0]);
-			System.out.println("c : "+Pos[i][1]);
+		if(blank[rMin][cMin]==0) {
+			zeroR=rMin; 
+			zeroC=cMin; 
+		}else if(blank[rMin][cMax]==0) {
+			zeroR=rMin; 
+			zeroC=cMax; 
+		}else if(blank[rMax][cMax]==0) {
+			zeroR=rMax; 
+			zeroC=cMax; 
+		}else if(blank[rMax][cMin]==0) {
+			zeroR=rMax; 
+			zeroC=cMin; 
 		}
 		
+		System.out.println(zeroR);
+		
 		int tmp=zeroR;
-		System.out.println(tmp);
 		int rCnt=0;
 		while(blank[tmp++][zeroC]==0) {
 			rCnt++;
@@ -95,6 +84,7 @@ public class Main {
 		while(blank[zeroR][tmp++]==0) {
 			cCnt++;
 		}//while
+		System.out.println(cCnt);
 		
 		int zeroSpace=rCnt*cCnt;
 		
