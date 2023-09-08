@@ -1,39 +1,57 @@
 package boj_10158;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-	static int arr[][];
-	static int R,C,r,c,T;
-	public static void main(String[] args) {
-		Scanner sc=new Scanner(System.in);
-		C=sc.nextInt();
-		R=sc.nextInt();
+	public static void main(String[] args) throws IOException {
+//		Scanner sc=new Scanner(System.in);
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        
+        int R,C,r,c,T;
+        
+        R = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
+//        System.out.println(R+" "+C);
+        
+        st = new StringTokenizer(br.readLine());
+        r = Integer.parseInt(st.nextToken());
+        c = Integer.parseInt(st.nextToken());
+//        System.out.println(r+" "+c);
 		
-		//first position
-		c=sc.nextInt();
-		r=sc.nextInt();
+        st = new StringTokenizer(br.readLine());
+        T = Integer.parseInt(st.nextToken());
+//        System.out.println(T);
 		
-		//time
-		T=sc.nextInt();
+//		R=s.charAt(0)-48;
+//		C=s.charAt(1)-48;
+//		
+//		//first position
+//		r=s.charAt(2)-48;
+//		c=s.charAt(3)-48;
+//		
+//		//time
+//		T=Integer.parseInt(s.substring(4));
 		
-		arr=new int[R+1][C+1];
+		int tmp=(r+T)%(R*2);
+		if(tmp<=R) {
+			r=tmp;
+		}else {
+			r=R-(tmp%R);
+		}
 		
-		//둘 다 +,+
-		int moveR=1;
-		int moveC=1;
+		tmp=(c+T)%(C*2);
+		if(tmp<=C) {
+			c=tmp;
+		}else {
+			c=C-(tmp%C);
+		}
 		
-		for(int i=0; i<T; i++) {
-//			System.out.println("(r,c) = "+ r+","+c);
-			//왼 오 위 아 벽 순
-			if(c==0 || c==C) moveC*=(-1);
-			if(r==0 || r==R) moveR*=(-1); 
-			
-			r+=moveR;
-			c+=moveC;
-		}//for
 		
-		System.out.println(c+" "+r);
+		System.out.println(r+" "+c);
 		
 		
 		
