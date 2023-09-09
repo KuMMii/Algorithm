@@ -1,41 +1,46 @@
 package boj_10158;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-	public static void main(String[] args) {
-		Scanner sc=new Scanner(System.in);
-		int C=sc.nextInt();
-		int R=sc.nextInt();
+	public static void main(String[] args) throws IOException {
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        
+        int R,C,r,c,T;
+        
+        R = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
+        
+        st = new StringTokenizer(br.readLine());
+        r = Integer.parseInt(st.nextToken());
+        c = Integer.parseInt(st.nextToken());
 		
-		//first position
-		int c=sc.nextInt();
-		int r=sc.nextInt();
+        st = new StringTokenizer(br.readLine());
+        T = Integer.parseInt(st.nextToken());
 		
-		//time
-		int T=sc.nextInt();
+		int tmp=(r+T)%(R*2);
+		if(tmp<=R) {
+			r=tmp;
+		}else {
+			r=R-(tmp%R);
+		}
 		
-		
-		//둘 다 +,+
-		int moveR=1;
-		int moveC=1;
-		
-		for(int i=0; i<T; i++) {
-//			System.out.println("(r,c) = "+ r+","+c);
-			//왼 오 위 아 벽 순
-			if(c==0 || c==C) moveC*=(-1);
-			if(r==0 || r==R) moveR*=(-1); 
-			
-			r+=moveR;
-			c+=moveC;
-		}//for
-		
-		System.out.println(c+" "+r);
+		tmp=(c+T)%(C*2);
+		if(tmp<=C) {
+			c=tmp;
+		}else {
+			c=C-(tmp%C);
+		}
 		
 		
+		System.out.println(r+" "+c);
 		
-		
-		
+
 	}//main
 
 }//class
