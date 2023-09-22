@@ -5,10 +5,11 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
-
+//Kruskal Ver
 public class Solution {
-	static Integer[][] node,line; //line -x,y,weight
-	static Integer[] p; 
+	static Integer[][] node; //line -x,y,weight
+	static Integer[] p;
+	static double[][] line;
 	static int N;
 	static double E;
 	public static void main(String[] args) throws FileNotFoundException {
@@ -20,8 +21,8 @@ public class Solution {
 		for(int tc=1; tc<=T; tc++) {
 			N=sc.nextInt();
 			node=new Integer[N][2];
-			line=new Integer[N*(N-1)/2][3];
-			p=new Integer[N]; //key, weight;
+			line=new double[N*(N-1)/2][3];//st, ed, w
+			p=new Integer[N]; //key;
 			
 			for(int i=0; i<N;i++) {
 				p[i]=i; //key
@@ -43,27 +44,26 @@ public class Solution {
 					line[idx][0]=i; //st node
 					line[idx][1]=j; //ed node
 					
-					Integer tmpX=node[i][0]-node[j][0];
-					Integer tmpY=node[i][1]-node[j][1];
+					double tmpX=node[i][0]-node[j][0];
+					double tmpY=node[i][1]-node[j][1];
 					
 					
-					line[idx++][2]=(int) (Math.pow(tmpX, 2)+Math.pow(tmpY, 2));
+					line[idx++][2]=Math.pow(tmpX, 2)+Math.pow(tmpY, 2);
 					
 				}
 			}//weight
 			
-//			System.out.println(Arrays.deepToString(line));
 			
 			//sort
-			Arrays.sort(line, new Comparator<Integer[]>() {
+			Arrays.sort(line,new Comparator<double[]>() {
 
 				@Override
-				public int compare(Integer[] o1, Integer[] o2) {
-					return o1[2]-o2[2];
+				public int compare(double[] o1, double[] o2) {
+					return (int) (o1[2] - o2[2]);
 				}
-			});//ascending
+			});
+
 			
-//			System.out.println(Arrays.deepToString(line));
 			
 			double ans=kruskal();
 			
@@ -95,10 +95,10 @@ public class Solution {
 		p[ed]=st;
 	}
 	
-	private static Integer findSet(Integer i) {
-		if(i!=p[i]) {
-			p[i]=findSet(p[i]);
+	private static Integer findSet(double i) {
+		if(i!=p[(int) i]) {
+			p[(int) i]=findSet(p[(int) i]);
 		}
-		return p[i];
+		return p[(int) i];
 	}//findSet
 }//class
