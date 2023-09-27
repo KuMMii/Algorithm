@@ -25,7 +25,7 @@ public class Main {
 		
 		for(int i=0; i<N;i++) {
 			town[i][0]=sc.nextInt();
-			town[i][1]=i;
+//			town[i][1]=i;
 		}
 		
 		for(int i=0; i<N; i++) {
@@ -35,6 +35,7 @@ public class Main {
 			}
 		}
 		
+		sc.close();
 		//input fin
 		
 		
@@ -93,6 +94,10 @@ public class Main {
 		boolean[] sel1=new boolean[N];
 		boolean[] sel2=new boolean[N];
 		
+		for(int i=0; i<N;i++) {
+			town[i][1]=i;
+		}
+		
 		//filter size==all
 		if(g1.size()==N || g2.size()==N) return false;
 		
@@ -104,6 +109,7 @@ public class Main {
 			
 			for(int i=1; i<g1.size(); i++) {
 				if(!sel1[i]&&adjarr[t][i]==1) {
+					sel1[i]=true;
 					union(t,i);
 				}
 			}
@@ -118,6 +124,7 @@ public class Main {
 			
 			for(int i=1; i<g2.size(); i++) {
 				if(!sel2[i]&&adjarr[t][i]==1) {
+					sel2[i]=true;
 					union(t,i);
 				}
 			}
