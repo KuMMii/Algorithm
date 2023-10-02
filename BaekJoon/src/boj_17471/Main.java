@@ -1,159 +1,155 @@
 package boj_17471;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Main {
-
-	static int N,min; //town quan
-	static int[][] adjarr, town;
-	static boolean[] visited;
 	
+	static int N,min;
+	static int[] ppl;
+	static int[][] adjArr;
+	static boolean[] visited, BFSvisted;
+	static Queue<Integer> q;
+	
+
 	public static void main(String[] args) {
+		//input
 		Scanner sc=new Scanner(System.in);
-		N=sc.nextInt();
+		N=sc.nextInt(); //town quan
 		
-		adjarr=new int[N][N]; //idx starts from 0
-		town=new int[N][2];
-		visited=new boolean[N];
-		min=Integer.MAX_VALUE;
-		
-		for(int i=0; i<N;i++) {
-			town[i][0]=sc.nextInt();
-//			town[i][1]=i;
+		//ppl
+		ppl=new int[N];
+		for(int i=0; i<N; i++) {
+			ppl[i]=sc.nextInt();
 		}
+		
+		//adjacent Array
+		adjArr=new int[N][N];
 		
 		for(int i=0; i<N; i++) {
-			int n=sc.nextInt();
-			for(int j=0; j<n; j++) {
-				adjarr[i][j]=1;
+			int tmp=sc.nextInt();
+			for(int j=0; j<tmp; j++) {
+				int tmp2=sc.nextInt()-1;
+				adjArr[i][tmp2]=1;
+				adjArr[tmp2][i]=1;
 			}
 		}
-		
 		sc.close();
 		//input fin
+
 		
+		//visited
+		visited=new boolean[N];
 		
-		powerset(0);
+		min=Integer.MAX_VALUE;
+		//1. power set
+		powerSet(0);
 		
-		System.out.println(min);
-		
+		if(min==Integer.MAX_VALUE) System.out.println(-1);
+		else System.out.println(min);
 	}//main
 
-	public static void powerset(int idx) {
+
+
+	public static void powerSet(int num) {
 		
 		//recursion terminates
-		if(idx==N) {
-			List<Integer> group1=new ArrayList<>();
-			List<Integer> group2=new ArrayList<>();
-			for(int i=0; i<N;i++) {
-				if(visited[i]) {
-					group1.add(i);
-				}else {
-					group2.add(i);
-				}
-			}
-			
-			//when 2 groups are all connected
-			if(union_Find(group1,group2)) {
-				int sum1=0;
-				for(int n : group1) {
-					sum1+=n;
-				}
-				int sum2=0;
-				for(int n : group2) {
-					sum2+=n;
-				}
-				int diff=Math.abs(sum1-sum2);
-				min=Math.min(min, diff);
-				
-				
-			}
+		if(num==N) {
+			//2. check whether it is union or not by BFS
+			isConnected();
 			return;
 		}
-		
-		visited[idx]=true;
-		powerset(idx+1);
-		
-		visited[idx]=false;
-		powerset(idx+1);
-		
-	}//powerset
-
 	
-	public static boolean union_Find(List<Integer> g1, List<Integer> g2) {
-		Set<Integer> set=new HashSet<Integer>();
-		Queue<Integer> q=new LinkedList<Integer>();
+		visited[num]=true;
+		powerSet(num+1);
+		visited[num]=false;
+		powerSet(num+1);
 		
 		
-		boolean[] sel1=new boolean[N];
-		boolean[] sel2=new boolean[N];
 		
-		for(int i=0; i<N;i++) {
-			town[i][1]=i;
+	}//powerSet
+
+
+
+
+	public static void isConnected() {
+		List<Integer> g1=new ArrayList<>();
+		List<Integer> g2=new ArrayList<>();
+		
+		//true, false인 애들끼리 묶음
+		for(int i=0; i<visited.length; i++) {
+			if(visited[i]) g1.add(i);
+			else g2.add(i);
 		}
 		
-		//filter size==all
-		if(g1.size()==N || g2.size()==N) return false;
-		
-		q.add(g1.get(0));
-		sel1[g1.get(0)]=true;
-		
-		while(!q.isEmpty()) {
-			int t=q.poll();
+		//마을 1개는 무조건 있어야함
+		if(g1.size()>0 && g2.size()>0) {
 			
-			for(int i=1; i<g1.size(); i++) {
-				if(!sel1[i]&&adjarr[t][i]==1) {
-					sel1[i]=true;
-					union(t,i);
+			//3. if it is united, then get the sum and compare with the min
+			if(BFS(g1) && BFS(g2)) {
+				int sum=0;
+				for(int i=0; i<g1.size(); i++) {
+					sum+=ppl[g1.get(i)];
 				}
+				for(int i=0; i<g2.size(); i++) {
+					sum-=ppl[g2.get(i)];
+				}
+				min=Math.min(Math.abs(sum), min);
+				
 			}
-		}//while g1
-		
-		q.clear();
-		q.add(g2.get(0));
-		sel2[g2.get(0)]=true;
-		
-		while(!q.isEmpty()) {
-			int t=q.poll();
 			
-			for(int i=1; i<g2.size(); i++) {
-				if(!sel2[i]&&adjarr[t][i]==1) {
-					sel2[i]=true;
-					union(t,i);
-				}
-			}
-		}//while g2
+		}
+	}//isConnected
+
+
+
+	public static boolean BFS(List<Integer> group) {
 		
+		BFSvisted=new boolean[N];
+		//check the connected number's quantity
+		int conNum=0;
+		int[][] tAdjArr=new int[N][N];
+		
+		//adjArr를 사용하면 영원히 바뀌니까 임시 인접행렬 생성
 		for(int i=0; i<N; i++) {
-			set.add(town[i][1]);
-		}
-		System.out.println(set);
-		if(set.size()==2) return true;
-		else return false;
-		
-	}//union_Find
-
-	public static void union(int a, int b) {
-		int fa=findset(a);
-		int fb=findset(b);
-		
-		if(fa!=fb) town[b][1]=fa;
-		
-	}//union
-
-	public static int findset(int x) {
-		
-		if(town[x][1]!=x) {
-			town[x][1]=findset(town[x][1]);
+			for(int j=0; j<N; j++) {
+				tAdjArr[i][j]=adjArr[i][j];
+			}
 		}
 		
-		return town[x][1];
-	}//findset
+
+		q=new LinkedList<Integer>();
+		q.add(group.get(0));
+		BFSvisted[group.get(0)]=true;
+
+		//bfs
+		while(!q.isEmpty()) {
+			int t=q.poll();
+			
+			//check a num which is not visited and connected with t
+			for(int i=0; i<group.size(); i++) {
+				if(tAdjArr[t][group.get(i)]==1) {
+					q.add(group.get(i));
+					conNum++;
+					//break the link
+					tAdjArr[t][group.get(i)]=0;
+					tAdjArr[group.get(i)][t]=0;
+					BFSvisted[group.get(i)]=true;
+					
+				}
+			}
+		}//while
+		
+		
+		//return if all nodes of list are true
+		int cnt=0;
+		for(int i=0; i<BFSvisted.length; i++) {
+			if(BFSvisted[i]) cnt++;
+		}
+		return cnt==group.size();
+	}//BFS
 	
 }//class
