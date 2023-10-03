@@ -19,6 +19,8 @@ public class Main {
 			money/=2;
 			int[] dp=new int[money+1];
 			
+			
+			//받은 개수보다 많이 더하게 되면 안되는 것도 추가해야함!
 			//select coin
 			for(int i=0; i<N; i++) {
 				//select money
