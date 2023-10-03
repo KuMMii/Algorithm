@@ -6,47 +6,34 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner sc=new Scanner(System.in);
 		int N=sc.nextInt();
-		int[] R=new int[N+1];
-		int[] G=new int[N+1];
-		int[] B=new int[N+1];
-		int[] dp=new int[N+1];
+		int[][] dp=new int[N+1][3];
 		
 		//GRB input
 		for(int i=1; i<=N; i++) {
-			R[i]=sc.nextInt();
-			G[i]=sc.nextInt();
-			B[i]=sc.nextInt();
+			dp[i][0]=sc.nextInt();
+			dp[i][1]=sc.nextInt();
+			dp[i][2]=sc.nextInt();
 		}
 		
-		char flag='r';
-		int sum=0;
-		for(int i=1; i<=N; i++) {
-			if(i==1) {
-				dp[i]=Math.min(R[i], G[i]);
-				if(dp[i]==G[i]) flag='r';
-				else flag='g';
-				dp[i]=Math.min(dp[i],B[i]);
-				if(dp[i]==B[i]) flag='b';
-			}else {
-				if(flag=='r') dp[i]=Math.min(G[i], B[i]);
-					if(dp[i]==G[i]) flag='r';
-					else flag='b';
-				
-				if(flag=='g') dp[i]=Math.min(R[i], B[i]);
-					if(dp[i]==R[i]) flag='r';
-					else flag='b';
-				
-				if(flag=='b') dp[i]=Math.min(R[i],G[i]);
-					if(dp[i]==R[i]) flag='r';
-					else flag='g';
-			}
-			sum+=dp[i];
+		//input fin
+		
+		for(int i=2; i<=N; i++) {
 			
-			System.out.println(flag);
+			//R
+			dp[i][0]+=Math.min(dp[i-1][1], dp[i-1][2]);
+			
+			//G
+			dp[i][1]+=Math.min(dp[i-1][0], dp[i-1][2]);
+			
+			//B
+			dp[i][2]+=Math.min(dp[i-1][1], dp[i-1][0]);
+			
 		}
 		
+		int min=Math.min(dp[N][0], dp[N][1]);
+		min=Math.min(min, dp[N][2]);
 		
-		System.out.println(sum);
+		System.out.println(min);
 		
 	}//main
 }//class
