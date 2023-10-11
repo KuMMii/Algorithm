@@ -20,8 +20,6 @@ public class Main {
 			perm(0);
 			
 			System.out.println(cnt);
-			
-			
 	}//main
 
 	public static void perm(int depth) {
@@ -40,8 +38,6 @@ public class Main {
 			}
 		}
 		
-		
-		
 	}//perm
 
 	//check if the column is placed on the same row or diagonal position
@@ -53,10 +49,6 @@ public class Main {
 			//diagonal position
 			if(Math.abs(col-i)==Math.abs(arr[col]-arr[i])) return false;
 		}
-		
-		
 		return true;
 	}
-
-	
 }//class
