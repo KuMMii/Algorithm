@@ -3,7 +3,6 @@ package boj_20056;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -57,46 +56,40 @@ public class Main {
 		
 		//K번 돌리기
 		for(int k=0; k<K; k++) {
+			
 			//큐에 있는만큼만 돌리기
 			int T=q.size();
 			//arr에 정보 다 더해서 저장
 			for(int t=0; t<T; t++) {
 				ball b=q.poll();
 				
-				//////공 출력
-//				System.out.println(k+1+"회");
-//				System.out.printf("좌표 : (%d, %d), 질량 : %d, 속력 : %d, 방향 : %d\n", b.R,b.C,b.M, b.S,b.D);
-				
-//				System.out.printf("%d %d %d\n",b.M,b.S,b.D);
 				//공의 새로운 위치
-				int ballR=Math.abs(b.R+dr[b.D]*b.S)%N;
+				int ballR=(b.R+dr[b.D]*b.S)%N;
+				//1부터 N까지니까 이렇게 처리함
 				if(ballR==0) ballR=N;
-				else if(ballR<0) ballR=ballR+N+1;
+				else if(ballR<1) ballR=ballR+N;
 				
-				int ballC=Math.abs(b.C+dc[b.D]*b.S)%N;
+				int ballC=(b.C+dc[b.D]*b.S)%N;
 				if(ballC==0) ballC=N;
-				else if(ballC<0) ballC=ballC+N+1;
+				else if(ballC<1) ballC=ballC+N;
 				
-//				System.out.printf("R : %d, C : %d\n", ballR,ballC);
-				
+				//질량, 속력, 개수, 뱡향의 짝홀체크, 방향
 				arr[ballR][ballC][0]+=b.M;
 				arr[ballR][ballC][1]+=b.S;
 				arr[ballR][ballC][2]++;
 				arr[ballR][ballC][3]+=(b.D%2);
-				arr[ballR][ballC][4]+=b.D;
+				arr[ballR][ballC][4]=b.D;
 			}//arr에 덧셈끝
 			
+			//0이 아닌 것들 찾기
 			for(int i=1; i<=N; i++) {
 				for(int j=1; j<=N; j++) {
-					
-					
-					
+
+					//그 자리의 개수
 					int quan=arr[i][j][2];
 					//1개인 경우는 큐에 바로 추가
 					if(quan==1) {
 						q.add(new ball(i,j,arr[i][j][0],arr[i][j][1],arr[i][j][4]));
-						
-						
 					}
 					//1개 이상이면 수술...들어가야함
 					else if(quan>1) {
@@ -104,69 +97,38 @@ public class Main {
 						if(Math.floor(arr[i][j][0]/5)==0) continue;
 						//아닌 경우면 4개로 나눠줘야함
 						else{
+							int[] direction= new int[]{0,2,4,6};
 							//방향이 전부 짝수/홀수
-							if(arr[i][j][3]==0 || arr[i][j][3]==quan) {
-								q.add(new ball(i,j,(int)Math.floor(arr[i][j][0]/5),(int)Math.floor(arr[i][j][2]/quan),0));
-								q.add(new ball(i,j,(int)Math.floor(arr[i][j][0]/5),(int)Math.floor(arr[i][j][2]/quan),2));
-								q.add(new ball(i,j,(int)Math.floor(arr[i][j][0]/5),(int)Math.floor(arr[i][j][2]/quan),4));
-								q.add(new ball(i,j,(int)Math.floor(arr[i][j][0]/5),(int)Math.floor(arr[i][j][2]/quan),6));
-							}else {
-								q.add(new ball(i,j,(int)Math.floor(arr[i][j][0]/5),(int)Math.floor(arr[i][j][2]/quan),1));
-								q.add(new ball(i,j,(int)Math.floor(arr[i][j][0]/5),(int)Math.floor(arr[i][j][2]/quan),3));
-								q.add(new ball(i,j,(int)Math.floor(arr[i][j][0]/5),(int)Math.floor(arr[i][j][2]/quan),5));
-								q.add(new ball(i,j,(int)Math.floor(arr[i][j][0]/5),(int)Math.floor(arr[i][j][2]/quan),7));
+							for(int I=0; I<4; I++) {
+								if(arr[i][j][3]!=0 &&  arr[i][j][3]!=quan) direction= new int[]{1,3,5,7};
+								
+								q.add(new ball(i,j,(int)Math.floor(arr[i][j][0]/5),(int)Math.floor(arr[i][j][1]/quan),direction[I]));
+								
 							}
-						}
-						
-						
-					}
+						}//else
+					}//else if(1개 이상)
 					
 					
-				}
-			}
-			/////////////////////////
-			//출력
-//			for(int I=1; I<=N; I++) {
-//				for(int J=1; J<=N; J++) {
-//					System.out.print(arr[I][J][0]+" ");
-//							System.out.print(arr[I][J][2]+" ");
-//					
-//				}
-//				System.out.println();
-//			}
-			
-			/////////////////////////////////
-//			System.out.println();
+				}//j
+			}//i
+
 			//0으로 초기화
 			for(int I=1; I<=N; I++) {
 				for(int J=1; J<=N; J++) {
-					for(int z=0; z<4; z++) {
+					for(int z=0; z<=4; z++) {
 						arr[I][J][z]=0;
 					}
-					
 				}
 			}
-			
-//			for(ball Ball : q) {
-//				System.out.println(Ball.M);
-//			}
-			
-			
 		}//K번 돌리기
+
 		
 		int ans=0;
+		//무게더하기
 		for(ball Ball : q) {
 			ans+=Ball.M;
 		}
 		
 		System.out.println(ans);
-//		for(int i=1; i<=N; i++) {
-//			for(int j=1; j<=N; j++) {
-//				System.out.print(arr[i][j][0]+" ");
-//			}
-//			System.out.println();
-//		}
-		
-		
 	}//main
 }//class
