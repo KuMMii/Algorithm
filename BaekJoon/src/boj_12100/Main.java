@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -27,10 +29,12 @@ public class Main {
 			}
 		}
 
-		max = Integer.MAX_VALUE;
+		max = Integer.MIN_VALUE;
 
 		// permutation
 		perm(0);
+		
+		System.out.println(max);
 
 	}// main
 
@@ -62,8 +66,16 @@ public class Main {
 		for (int i = 0; i < 5; i++) {
 			tmp = moveArr(i, tmp);
 		}
+		
+		int num=0; 
+		
+		for(int i=0; i<N; i++) {
+			for(int j=0; j<N; j++) {
+				num=Math.max(num, tmp[i][j]);
+			}
+		}
 
-		return 0;
+		return num;
 	}// move
 
 	public static int[][] moveArr(int dir, int[][] tmp) {
@@ -110,14 +122,14 @@ public class Main {
 				}
 
 				// 밑줄들 확인
-				checkBehind(fix, move, ref, dir, tmp);
+				tmp=checkBehind(fix, move, ref, dir, tmp);
 
-//				///////////////////출력존
-//				for(int[] q:tmp) {
-//					System.out.println(Arrays.toString(q));
-//				}
-//				System.out.println();
-//				//////////////////////////////////////
+				///////////////////출력존
+				for(int[] q:tmp) {
+					System.out.println(Arrays.toString(q));
+				}
+				System.out.println();
+				//////////////////////////////////////
 
 			}
 
@@ -125,12 +137,12 @@ public class Main {
 		// 땡겨
 		tmp = pull(dir, tmp);
 
-		/////////////////// 출력존
-		for (int[] q : tmp) {
-			System.out.println(Arrays.toString(q));
-		}
-		System.out.println();
-		//////////////////////////////////////
+//		/////////////////// 출력존
+//		for (int[] q : tmp) {
+//			System.out.println(Arrays.toString(q));
+//		}
+//		System.out.println();
+//		//////////////////////////////////////
 
 		return tmp;
 	}// moveArr
@@ -138,74 +150,88 @@ public class Main {
 	// 땡기는 메서드
 	public static int[][] pull(int dir, int[][] tmp) {
 
-/////////////////////출력존
-//		for (int[] q : tmp) {
-//			System.out.println(Arrays.toString(q));
-//		}
-//		System.out.println();
-////////////////////////////////////////
-
-		// 상, 좌
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N - 1; j++) {
-				// 상일 때
-				if (dir == 0) {
-					int ref = tmp[i][j];
-					// 값이 0일 때
-					if (ref == 0) {
-						// 다음부분부터 숫자 있는거 찾아서 스왑
-						for (int m = j + 1; m < N; m++) {
-							if (tmp[i][m] != 0) {
-								tmp[i][j] = tmp[i][m];
-								tmp[i][m] = 0;
-								break;
-							}
-						}
-					}
-				} // 좌
-				else if (dir == 2) {
-					int ref = tmp[j][i];
-					if (ref == 0) {
-						// 다음부분부터 숫자 있는거 찾아서 스왑
-						for (int m = j + 1; m < N; m++) {
-							if (tmp[m][i] != 0) {
-								tmp[i][j] = tmp[m][i];
-								tmp[m][i] = 0;
-								break;
-							}
-						}
-					}
+		
+		Queue<Integer> q=new LinkedList<>();
+		
+		//상
+		if(dir==0) {
+			for(int i=0; i<N; i++) {
+				//0 아닌 것만 저장
+				for(int j=0; j<N; j++) {
+					if(tmp[i][j]!=0) q.add(tmp[i][j]);
+					tmp[i][j]=0;
 				}
-				// 하
-				else if (dir == 1) {
-					int ref = tmp[N - i][N - 1 - j];
-					if (ref == 0) {
-						// 다음부분부터 숫자 있는거 찾아서 스왑
-						for (int m = N - 2 - j; m >= 0; m--) {
-							if (tmp[i][m] != 0) {
-								tmp[N - i][N - 1 - j] = tmp[i][m];
-								tmp[i][m] = 0;
-								break;
-							}
-						}
-					}
+				
+				//큐에 담은거 다시 뿌려줄거임
+				
+				for(int j=0; j<q.size(); j++) {
+					tmp[i][j]=q.poll();
 				}
-				// 우
-				else if (dir == 3) {
-					int ref = tmp[N - 1 - j][N - i];
-					if (ref == 0) {
-						// 다음부분부터 숫자 있는거 찾아서 스왑
-						for (int m = N - 2 - j; m >= 0; m--) {
-							if (tmp[m][i] != 0) {
-								tmp[N - 1 - j][N - i] = tmp[m][i];
-								tmp[m][i] = 0;
-								break;
-							}
-						}
-					}
-				}
+				
+				
 			}
 		}
+		
+		//하
+		else if(dir==1) {
+			for(int i=N-1; i>=1; i--) {
+				//0 아닌 것만 저장
+				for(int j=0; j<N; j++) {
+					if(tmp[i][j]!=0) q.add(tmp[i][j]);
+					tmp[i][j]=0;
+				}
+				
+				//큐에 담은거 다시 뿌려줄거임
+				
+				for(int j=0; j<q.size(); j++) {
+					tmp[i][j]=q.poll();
+				}
+				
+				
+			}
+		}
+			
+		//좌
+		else if(dir==2) {
+			for(int i=0; i<N; i++) {
+				//0 아닌 것만 저장
+				for(int j=0; j<N; j++) {
+					if(tmp[j][i]!=0) q.add(tmp[j][i]);
+					tmp[j][i]=0;
+				}
+				
+				//큐에 담은거 다시 뿌려줄거임
+				
+				for(int j=0; j<q.size(); j++) {
+					tmp[j][i]=q.poll();
+				}
+				
+				
+			}
+		}
+		
+		
+		//우
+		else if(dir==3) {
+			for(int i=N-1; i>=1; i--) {
+				//0 아닌 것만 저장
+				for(int j=0; j<N; j++) {
+					if(tmp[j][i]!=0) q.add(tmp[j][i]);
+					tmp[j][i]=0;
+				}
+				
+				//큐에 담은거 다시 뿌려줄거임
+				
+				for(int j=0; j<q.size(); j++) {
+					tmp[j][i]=q.poll();
+				}
+				
+				
+			}
+		}
+		
+		
+		
 		return tmp;
 	}// pull
 
@@ -216,25 +242,25 @@ public class Main {
 		if (ref == 0)
 			return tmp;
 
-		// 상 숫자 올라가는 거
-		if (dir == 0) {
-			// 선택된 위치 다음부터 끝까지 비교
-			for (int i = move + 1; i <= N - 1; i++) {
-
-				// 값=0
-				if (tmp[fix][i] == 0)
-					continue;
-
-				// 값 같을 때는 합치고 합친 요소자리 0으로 만들기
-				// 그리고 바로 이 배열을 리턴해서 다음자리부터 또 돌게 하기
-				if (tmp[fix][i] == ref) {
-					tmp[fix][move] = ref * 2;
-					tmp[fix][i] = 0;
-					break;
-				}
-			}
-			return tmp;
-		} else if (dir == 2) {
+//		// 상 숫자 올라가는 거
+//		if (dir == 0) {
+//			// 선택된 위치 다음부터 끝까지 비교
+//			for (int i = move + 1; i <= N - 1; i++) {
+//
+//				// 값=0
+//				if (tmp[fix][i] == 0)
+//					continue;
+//
+//				// 값 같을 때는 합치고 합친 요소자리 0으로 만들기
+//				// 그리고 바로 이 배열을 리턴해서 다음자리부터 또 돌게 하기
+//				if (tmp[fix][i] == ref) {
+//					tmp[fix][move] = ref * 2;
+//					tmp[fix][i] = 0;
+//					break;
+//				}
+//			}
+//			return tmp;
+		/*} else */if (dir == 2) {
 			// 선택된 위치 다음부터 끝까지 비교
 			for (int i = move + 1; i <= N - 1; i++) {
 
@@ -251,26 +277,26 @@ public class Main {
 				}
 
 			}
-			return tmp;
-		} else if (dir == 1) {
-			// 선택된 위치 다음부터 끝까지 비교
-			for (int i = move - 1; i >= 0; i--) {
-
-				// 값=0
-				if (tmp[fix][i] == 0)
-					continue;
-
-				// 값 같을 때는 합치고 합친 요소자리 0으로 만들기
-				// 그리고 바로 이 배열을 리턴해서 다음자리부터 또 돌게 하기
-				if (tmp[fix][i] == ref) {
-					tmp[fix][move] = ref * 2;
-					tmp[fix][i] = 0;
-					break;
-				}
-
-			}
-			return tmp;
-		} else {
+//			return tmp;
+//		} else if (dir == 1) {
+//			// 선택된 위치 다음부터 끝까지 비교
+//			for (int i = move - 1; i >= 0; i--) {
+//
+//				// 값=0
+//				if (tmp[fix][i] == 0)
+//					continue;
+//
+//				// 값 같을 때는 합치고 합친 요소자리 0으로 만들기
+//				// 그리고 바로 이 배열을 리턴해서 다음자리부터 또 돌게 하기
+//				if (tmp[fix][i] == ref) {
+//					tmp[fix][move] = ref * 2;
+//					tmp[fix][i] = 0;
+//					break;
+//				}
+//
+//			}
+//			return tmp;
+		} else if(dir==3) {
 			// 선택된 위치 다음부터 끝까지 비교
 			for (int i = move - 1; i >= 0; i--) {
 
@@ -287,8 +313,18 @@ public class Main {
 				}
 
 			}
-			return tmp;
 		}
+		
+		
+		/////////////////// 출력존
+		for (int[] q : tmp) {
+			System.out.println(Arrays.toString(q));
+		}
+		System.out.println();
+		//////////////////////////////////////
+		
+		
+		return tmp;
 
 	}// checkBehind
 
