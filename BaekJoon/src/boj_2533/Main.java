@@ -12,33 +12,23 @@ import java.util.StringTokenizer;
 
 public class Main {
 	
-	static class person{
-		int s;
-		int e;
-		public person(int s, int e) {
-			super();
-			this.s = s;
-			this.e = e;
-		}
-		
-	}
-	
-	static int N,cnt, min;
+	static int N;
 	static boolean[] visited; //for bfs
-	static boolean[] isEarly;
-	static int[] perArr;
-	static List<person> [] list;
+	static List<Integer> [] graph;
+	//dp : 해당 지점까지의 얼리어답터 인원수(트리 구조라 자식 노드들의 dp개수를 더해옴)
+	static int[][] dp; //[r][c]일 때, r : 노드 번호, c : 0 -> 해당 노드가 earlyAdaptor이 아닐때, 1 -> 해당 노드가 얼리어답터일때
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st=new StringTokenizer(br.readLine());
 		
 		N=Integer.parseInt(st.nextToken());
-		perArr=new int[N+1];
-		list=new ArrayList[N+1];
+		graph=new ArrayList[N+1];
+		visited=new boolean[N+1];
+		dp=new int[N+1][2];
 		
 		for(int i=1; i<=N; i++) {
-			list[i]=new ArrayList<>();
+			graph[i]=new ArrayList<>();
 		}
 		
 		//input
@@ -47,71 +37,30 @@ public class Main {
 			int s=Integer.parseInt(st.nextToken());
 			int e=Integer.parseInt(st.nextToken());
 			
-//			System.out.printf("%d : %d\n",s,e);
+			graph[s].add(e);
+			graph[e].add(s);
 			
-			list[s].add(new person(s,e));
-			list[e].add(new person(e,s));
 		}
 		///////////////input fin
 		
-		min=Integer.MAX_VALUE;
-		
-		//얼리어답터 선택
-		for(int i=1; i<=N; i++) {
-			cnt=1;
-			BFS(2);
-		}
-		
-		
-//		System.out.println(min);
-		
-		
-		
+		//트리 구조라 1부터 시작
+		DFS(1);
+		System.out.println(Math.min(dp[1][0], dp[1][1]));
 		
 	}//main
 
-	public static void BFS(int idx) {
-		
-		visited=new boolean[N+1];
-		isEarly=new boolean[N+1];
-		Queue<person> q=new LinkedList<>();
-		
-		q.addAll(list[idx]);
-		
-		
-//		System.out.println(list[idx]);
-		
-		
-		isEarly[idx]=true;
+	public static void DFS(int idx) {
 		visited[idx]=true;
+		dp[idx][0]=0; //해당 노드가 얼리어답터가 아닌 경우
+		dp[idx][1]=1; //해당 노드가 얼리인 경우(우선 시작 시 해당 지점이 얼리어답터이므로 개수 1)
 		
-		
-		while(!q.isEmpty()) {
-//			System.out.println("visited : "+Arrays.toString(visited));
-			//꺼내
-			person p=q.poll();
-			//도착 지점이 false여야 함
-			if(!visited[p.e]) {
-				//도착 지점의 연결 노드들 큐에 담고 방문으로 바꾸기
-				q.addAll(list[p.e]);
-				visited[p.e]=true;
-				//도착지점이 얼리가 아니라면 연결된 노드들 다 e로 만들기
-				if(!isEarly[p.e] ) {
-					//연결된 노드들 리스트에 담기
-					List<person> earlyChk=list[p.e];
-					
-					for(int i=0; i<earlyChk.size(); i++) {
-						if(!isEarly[earlyChk.get(i).e]) {
-							cnt++;
-							isEarly[earlyChk.get(i).e]=true;
-						}
-					}
-				}
+		for(int child : graph[idx]) {
+			if(!visited[child]) {
+				DFS(child); //dfs 재귀 호출을 통해 자식 노드의 dp값을 미리 구한다
+				dp[idx][0]+=dp[child][1]; //자식 노드가 무조건 얼리어답터야함
+				dp[idx][1]+=Math.min(dp[child][0], dp[child][1]);
 			}
-		}//while
-		System.out.println(cnt);
-		System.out.println("isEarly : "+Arrays.toString(isEarly));
-		
-		min=Math.min(min, cnt);
-	}//bfs
+		}
+	}
+
 }//class
