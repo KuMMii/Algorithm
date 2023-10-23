@@ -28,7 +28,7 @@ public class Main {
 		}
 	}//computer
 
-	static int N,M;
+	static int N,M,sum;
 	static List<computer>[] graph;
 	static boolean[] visited;
 	static int[] arr; //무한대 담을 배열
@@ -42,8 +42,8 @@ public class Main {
 		st=new StringTokenizer(br.readLine());
 		M=Integer.parseInt(st.nextToken());
 		
-		graph=new ArrayList[M];
-		for(int i=0; i<M; i++) {
+		graph=new ArrayList[N+1];
+		for(int i=1; i<N+1; i++) {
 			graph[i]=new ArrayList<>();
 		}
 		
@@ -54,40 +54,30 @@ public class Main {
 			int w=Integer.parseInt(st.nextToken());
 			
 			graph[s].add(new computer(s,e,w));
-//			graph[e].add(new computer(e,s,w));
+			graph[e].add(new computer(e,s,w));
 		}
 		
 		visited=new boolean[N+1];
-		arr=new int[N+1];
 		
-		Arrays.fill(arr, Integer.MAX_VALUE);
+		sum=0;
+		Prim(1);
 		
-		Dijkstra(1);
-		
-//		int max=0;
-//		for(int i=1; i<=N; i++) {
-//			max=Math.max(max, arr[i]);
-//		}
-//		
-//		System.out.println(max);
-		
+		System.out.println(sum);
 	}//main
 
-	public static void Dijkstra(int idx) {
+	public static void Prim(int idx) {
 		PriorityQueue<computer> q=new PriorityQueue<>();
-		arr[idx]=0;
 		visited[idx]=true;
 		q.addAll(graph[idx]);
 		while(!q.isEmpty()) {
 			computer t=q.poll();
-			if (/* !visited[t.e]&& */arr[t.e]>arr[t.s]+t.w) {
-				arr[t.e]=arr[t.s]+t.w;
+			if (!visited[t.e]) {
+				sum+=t.w;
 				q.addAll(graph[t.e]);
 				visited[t.e]=true;
 			}
 			
-			System.out.println(Arrays.toString(arr));
 		}
 		
-	}//dijkstra
+	}//Prim
 }//class
