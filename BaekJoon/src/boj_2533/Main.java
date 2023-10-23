@@ -47,6 +47,8 @@ public class Main {
 			int s=Integer.parseInt(st.nextToken());
 			int e=Integer.parseInt(st.nextToken());
 			
+//			System.out.printf("%d : %d\n",s,e);
+			
 			list[s].add(new person(s,e));
 			list[e].add(new person(e,s));
 		}
@@ -60,11 +62,6 @@ public class Main {
 			BFS(2);
 		}
 		
-//		for(int i=1; i<=N; i++) {
-//			for(int j=0; j<list[i].size(); j++) {
-//				System.out.printf("(%d,%d)\n",list[i].get(j).s,list[i].get(j).e);
-//			}
-//		}
 		
 //		System.out.println(min);
 		
