@@ -8,22 +8,17 @@ public class Solution {
 //		gcdOfStrings(str1,str2);
 	}
 
-	    public static String gcdOfStrings(String str1, String str2) {
-	    	String s1=str1.length()>=str2.length() ? str1:str2;
-	    	String s2=str1.length()<str2.length() ? str1:str2;
-	    	
-	        if(!s2.contains(s1.replace(s2, ""))) return "";
-			else {
-				int len=s2.length();
-				for(int i=len-1; i>=2; i--) {
-					if(s2.length() % i==0) {
-						String t1=s2.substring(0,i);
-						String t2=s2.substring(i,i*2);
-						
-						if(t1.equals(t2)) return t1;
-					}
-				}
-				return str2;
+	     public static String gcdOfStrings(String str1, String str2) {
+		    	if(!(str1+str2).equals(str2+str1)) return "";
+		    	
+	    		int i=GCD(str1.length(),str2.length());
+	    		return str1.substring(0,i);
+		    	
+		    	
+		    }
+
+			public static int GCD(int s1, int s2) {
+				if(s2==0) return s1;
+	            else return GCD(s2,s1%s2);
 			}
-	    }
-}
+	}
