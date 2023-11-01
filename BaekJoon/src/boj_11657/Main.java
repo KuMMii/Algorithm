@@ -57,31 +57,42 @@ public class Main {
 			visited[edges[0].s]=true;
 			for(int j=0; j<M;j++) {
 				node n=edges[j];
-				//if circles, return -1
-				if(visited[n.e]) {
-					System.out.println(-1);
-					return;
-				}
 				
 				//////////////////
-//				System.out.println();
-//				System.out.println(i+"회");
-//				System.out.printf("(%d,%d,%d)\n",n.s,n.e,n.t);
-//				System.out.println(Arrays.toString(time));
+				System.out.println();
+				System.out.println(i+"회");
+				System.out.printf("(%d,%d,%d)\n",n.s,n.e,n.t);
+				System.out.println(Arrays.toString(time));
 				/////////////////////
+				if(time[n.s]==Integer.MAX_VALUE) continue;
 				
 				if(time[n.e]>time[n.s]+n.t) {
 					time[n.e]=time[n.s]+n.t;
 					visited[n.e]=true;
 				}
 				
-//				System.out.println(Arrays.toString(time));
+				System.out.println(Arrays.toString(time));
+			}
+			
+		}
+		
+		//check if it has a cycle
+		for(int j=0; j<M;j++) {
+			node n=edges[j];
+			
+			if(time[n.e]>time[n.s]+n.t) {
+				System.out.println(-1);
+				return;
 			}
 			
 		}
 		
 		for(int i=2; i<=N; i++) {
-			System.out.println(time[i]);
+			if(time[i]==Integer.MAX_VALUE) {
+				System.out.println(-1);
+				return;
+			}
+			else System.out.println(time[i]);
 		}
 		
 		
