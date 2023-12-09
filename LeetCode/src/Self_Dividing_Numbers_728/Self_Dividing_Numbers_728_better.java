@@ -3,10 +3,8 @@ package Self_Dividing_Numbers_728;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Self_Dividing_Numbers_728_better {
 
-}
-class Solution {
+public class Self_Dividing_Numbers_728_better {
     public List<Integer> selfDividingNumbers(int left, int right) {
         List<Integer> list=new ArrayList<>();
 
