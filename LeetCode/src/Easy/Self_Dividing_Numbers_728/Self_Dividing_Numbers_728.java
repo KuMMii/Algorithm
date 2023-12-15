@@ -1,4 +1,4 @@
-package Self_Dividing_Numbers_728;
+package Easy.Self_Dividing_Numbers_728;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,11 +6,12 @@ import java.util.List;
 public class Self_Dividing_Numbers_728 {
 
 }
+
 class Solution {
     public List<Integer> selfDividingNumbers(int left, int right) {
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = left; i <= right; i++) {
-            if(checking(i)) list.add(i);
+            if (checking(i)) list.add(i);
         }
         return list;
     }

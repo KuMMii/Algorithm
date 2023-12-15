@@ -1,4 +1,4 @@
-package Reverse_Words_in_a_String_151;
+package Medium.Reverse_Words_in_a_String_151;
 
 public class Solution2 {
     public static void main(String[] args) {

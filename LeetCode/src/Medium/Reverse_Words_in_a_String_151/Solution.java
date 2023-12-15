@@ -1,4 +1,4 @@
-package Reverse_Words_in_a_String_151;
+package Medium.Reverse_Words_in_a_String_151;
 
 import java.util.ArrayList;
 import java.util.Collections;

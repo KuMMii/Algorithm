@@ -1,4 +1,4 @@
-package Reverse_Vowels_of_a_String_345;
+package Easy.Reverse_Vowels_of_a_String_345;
 
 public class Solution3 {
     public static void main(String[] args) {
