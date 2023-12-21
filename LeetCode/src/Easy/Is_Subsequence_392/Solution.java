@@ -1,4 +1,4 @@
-package Medium.Is_Subsequence_392;
+package Easy.Is_Subsequence_392;
 
 public class Solution {
     public static void main(String[] args) {

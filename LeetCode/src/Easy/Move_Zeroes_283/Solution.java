@@ -1,4 +1,4 @@
-package Medium.Move_Zeroes_283;
+package Easy.Move_Zeroes_283;
 
 import java.util.Arrays;
 
